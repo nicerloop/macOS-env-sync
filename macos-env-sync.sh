@@ -32,7 +32,8 @@ if [ $# -eq 0 ]; then
 fi
 
 NAMES=$(grep '^[:space:]*export' "$@" | cut -d '=' -f 1 | cut -d ' ' -f 2 | sort -u)
-VALUES=$(env | grep "$NAMES" | sort -u -t '=' -k 1)
+NAME_REGEXS=$(echo "$NAMES" | sed 's/^/^/;s/$/=/')
+VALUES=$(env | grep "$NAME_REGEXS" | sort -u -t '=' -k 1)
 for VALUE in $VALUES; do
     NAME=$(echo "$VALUE" | cut -d '=' -f 1)
     VALUE=$(echo "$VALUE" | cut -d '=' -f 2)
